@@ -23,8 +23,8 @@ function Login() {
       });
 
       if (resposta.data.success) {
-        localStorage.setItem("usuario", JSON.stringify(resposta.data.usuario));
-        navigate("/painel");
+  localStorage.setItem("usuario", JSON.stringify(resposta.data.usuario));
+  window.location.href = "https://painel.gruporeune.com"; // redireciona direto pro painel
       } else {
         setErro(resposta.data.message);
       }
