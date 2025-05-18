@@ -8,10 +8,12 @@ const db = require('./db');
 app.use(cors());
 app.use(express.json());
 
+// ROTA PRINCIPAL
 app.get('/', (req, res) => {
   res.send('Servidor do GRUPO REUNE está funcionando!');
 });
 
+// ✅ ROTA DE CADASTRO
 app.post('/api/cadastrar', async (req, res) => {
   const { nome, email, telefone, senha } = req.body;
 
@@ -37,6 +39,7 @@ app.post('/api/cadastrar', async (req, res) => {
   }
 });
 
+// ✅ ROTA DE LOGIN COM success: true
 app.post('/api/login', (req, res) => {
   const { email, senha } = req.body;
   console.log('🔐 Tentando login com:', email);
@@ -81,6 +84,7 @@ app.post('/api/login', (req, res) => {
   });
 });
 
+// ✅ ROTA DE CONTATO
 app.post('/api/contato', (req, res) => {
   const { nome, email, mensagem } = req.body;
 
@@ -97,6 +101,7 @@ app.post('/api/contato', (req, res) => {
   });
 });
 
+// ✅ ROTA PARA LISTAR CONTATOS
 app.get('/api/contatos', (req, res) => {
   const sql = 'SELECT * FROM contatos ORDER BY id DESC';
 
@@ -109,6 +114,7 @@ app.get('/api/contatos', (req, res) => {
   });
 });
 
+// INICIA O SERVIDOR
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
