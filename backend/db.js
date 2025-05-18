@@ -1,10 +1,10 @@
 const mysql = require('mysql');
 
 const db = mysql.createConnection({
-  host: 'srv1896.hstgr.io',       // <-- substitua pelo host exato do banco (provavelmente algo assim)
-  user: 'u167429742_adminreune', // <-- seu usuário
-  password: '270389Caw@',         // <-- sua senha do MySQL
-  database: 'u167429742_gruporeune_db' // <-- nome do banco
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 db.connect((err) => {
