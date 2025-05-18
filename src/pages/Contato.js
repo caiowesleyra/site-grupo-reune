@@ -48,7 +48,7 @@ function Contato() {
             Tem alguma dúvida ou quer saber mais? Fale conosco através do formulário ou dos nossos canais de comunicação.
           </p>
 
-          <form method="POST" action="http://localhost:5000/api/contato">
+          <form method="POST" action="https://grupo-reune-backend-production.up.railway.app/api/login">
             <input type="text" name="nome" placeholder="Seu nome" style={inputStyle} required />
             <input type="email" name="email" placeholder="Seu e-mail" style={inputStyle} required />
             <textarea name="mensagem" placeholder="Sua mensagem" rows="5" style={inputStyle} required />

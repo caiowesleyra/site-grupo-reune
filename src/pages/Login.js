@@ -6,30 +6,42 @@ function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Mostra o card com delay para animação de entrada
     setTimeout(() => setShowCard(true), 100);
   }, []);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async () => {
+    console.log("🔍 handleLogin foi chamado");
+
+    setErro("");
+    setCarregando(true);
+
     try {
-      const resposta = await axios.post("http://localhost:5000/api/login", {
+      const resposta = await axios.post("https://grupo-reune-backend-production.up.railway.app/api/login", {
         email,
         senha,
       });
 
-      if (resposta.data.success) {
-  localStorage.setItem("usuario", JSON.stringify(resposta.data.usuario));
-  window.location.href = "https://painel.gruporeune.com"; // redireciona direto pro painel
+      console.log("Resposta do backend:", resposta.data);
+
+      const usuario = resposta.data.usuario || null;
+      const sucesso = resposta.data.success || resposta.status === 200;
+
+      if (sucesso && usuario) {
+        localStorage.setItem("usuario", JSON.stringify(usuario));
+        window.location.href = "https://painel.gruporeune.com";
       } else {
-        setErro(resposta.data.message);
+        setErro(resposta.data.erro || resposta.data.message || "Email ou senha inválidos.");
       }
     } catch (error) {
+      console.error("Erro no login:", error);
       setErro("Erro ao tentar fazer login. Verifique os dados.");
+    } finally {
+      setCarregando(false);
     }
   };
 
@@ -67,7 +79,8 @@ function Login() {
           Bem-vindo de volta
         </h2>
 
-        <form onSubmit={handleLogin}>
+        {/* Form sem onSubmit, tudo via onClick no botão */}
+        <form>
           <input
             type="email"
             placeholder="Seu e-mail"
@@ -88,16 +101,16 @@ function Login() {
             <p style={{ color: "#ff7675", marginBottom: "15px" }}>{erro}</p>
           )}
           <button
-            type="submit"
-            style={botaoEstilizado}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.backgroundColor = "#019875")
-            }
-            onMouseOut={(e) =>
-              (e.currentTarget.style.backgroundColor = "#00b894")
-            }
+            type="button"
+            onClick={handleLogin}
+            disabled={carregando}
+            style={{
+              ...botaoEstilizado,
+              backgroundColor: carregando ? "#636e72" : "#00b894",
+              cursor: carregando ? "not-allowed" : "pointer",
+            }}
           >
-            Entrar
+            {carregando ? "Entrando..." : "Entrar"}
           </button>
         </form>
       </div>
@@ -119,13 +132,11 @@ const inputEstilizado = {
 const botaoEstilizado = {
   width: "100%",
   padding: "16px",
-  backgroundColor: "#00b894",
   color: "#fff",
   border: "none",
   borderRadius: "10px",
   fontSize: "1.1rem",
   fontWeight: "600",
-  cursor: "pointer",
   transition: "background-color 0.3s",
 };
 
