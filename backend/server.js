@@ -27,7 +27,16 @@ app.post('/api/cadastrar', async (req, res) => {
         console.error('Erro ao inserir no banco:', err);
         return res.status(500).json({ erro: 'Erro ao cadastrar usuário.' });
       }
-      res.status(200).json({ mensagem: 'Usuário cadastrado com sucesso!' });
+
+      // ✅ Resposta completa esperada pelo frontend
+      res.status(200).json({
+        success: true,
+        usuario: {
+          nome,
+          email,
+          telefone
+        }
+      });
     });
   } catch (error) {
     console.error('Erro ao criptografar a senha:', error);
