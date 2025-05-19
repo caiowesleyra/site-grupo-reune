@@ -21,24 +21,23 @@ function Login() {
     setCarregando(true);
 
     try {
-      const resposta = await axios.post("https://grupo-reune-backend-production.up.railway.app/api/login", {
+      const resposta = await axios.post("https://grupo-reune-backend.onrender.com/api/login", {
         email,
         senha,
       });
 
-      console.log("Resposta do backend:", resposta.data);
+      console.log("✅ Resposta do backend:", resposta.data);
 
-      const usuario = resposta.data.usuario || null;
-      const sucesso = resposta.data.success || resposta.status === 200;
+      const { success, usuario } = resposta.data;
 
-      if (sucesso && usuario) {
+      if (success && usuario) {
         localStorage.setItem("usuario", JSON.stringify(usuario));
         window.location.href = "https://painel.gruporeune.com";
       } else {
-        setErro(resposta.data.erro || resposta.data.message || "Email ou senha inválidos.");
+        setErro(resposta.data.erro || "Email ou senha inválidos.");
       }
     } catch (error) {
-      console.error("Erro no login:", error);
+      console.error("❌ Erro no login:", error);
       setErro("Erro ao tentar fazer login. Verifique os dados.");
     } finally {
       setCarregando(false);
@@ -79,7 +78,6 @@ function Login() {
           Bem-vindo de volta
         </h2>
 
-        {/* Form sem onSubmit, tudo via onClick no botão */}
         <form>
           <input
             type="email"
