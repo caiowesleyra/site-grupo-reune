@@ -18,7 +18,7 @@ function Cadastro() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const resposta = await axios.post("https://grupo-reune-backend-production.up.railway.app/api/cadastrar", {
+      const resposta = await axios.post("https://grupo-reune-backend.onrender.com/api/cadastrar", {
         nome,
         email,
         telefone,
