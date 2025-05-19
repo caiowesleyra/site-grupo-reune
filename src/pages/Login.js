@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./Login.css"; // se você usa um CSS externo
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -16,8 +17,7 @@ function Login() {
 
   const handleLogin = async () => {
     console.log("🔍 handleLogin foi chamado");
-
-    setErro(""); // limpa erro anterior
+    setErro("");
     setCarregando(true);
 
     try {
@@ -28,14 +28,11 @@ function Login() {
 
       console.log("✅ Resposta do backend:", resposta.data);
 
-      // Se chegou aqui, login deu certo
       setCarregando(false);
-
-      // Salva os dados do usuário no localStorage
       localStorage.setItem("usuarioLogado", JSON.stringify(resposta.data.usuario));
 
-      // Redireciona para o painel
-      navigate("https://painel.gruporeune.com");
+      // Redireciona para o painel do backoffice
+      window.location.href = "https://painel.gruporeune.com";
 
     } catch (erro) {
       console.error("❌ Erro no login:", erro);
@@ -45,24 +42,75 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className={`login-card ${showCard ? "show" : ""}`}>
-        <img src="/logo.png" alt="Logo" className="logo" />
-        <h2>Bem-vindo de volta</h2>
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "#000",
+      color: "#fff",
+      fontFamily: "Poppins, sans-serif",
+    }}>
+      <div style={{
+        background: "#111",
+        borderRadius: "12px",
+        padding: "40px",
+        width: "100%",
+        maxWidth: "400px",
+        boxShadow: "0 0 20px rgba(0,0,0,0.5)",
+        transform: showCard ? "translateY(0)" : "translateY(50px)",
+        opacity: showCard ? 1 : 0,
+        transition: "all 0.5s ease",
+      }}>
+        <div style={{ textAlign: "center", marginBottom: "20px" }}>
+          <img src="/logo.png" alt="REUNE" style={{ width: "80px", marginBottom: "10px" }} />
+          <h2>Bem-vindo de volta</h2>
+        </div>
+
         <input
           type="email"
           placeholder="Digite seu e-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "12px",
+            marginBottom: "12px",
+            borderRadius: "6px",
+            border: "none",
+            outline: "none",
+          }}
         />
         <input
           type="password"
           placeholder="Digite sua senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "12px",
+            marginBottom: "12px",
+            borderRadius: "6px",
+            border: "none",
+            outline: "none",
+          }}
         />
-        {erro && <p className="erro">{erro}</p>}
-        <button onClick={handleLogin} disabled={carregando}>
+        {erro && <p style={{ color: "#ff4d4f", marginBottom: "10px" }}>{erro}</p>}
+        <button
+          onClick={handleLogin}
+          disabled={carregando}
+          style={{
+            width: "100%",
+            padding: "12px",
+            backgroundColor: "#00C9A7",
+            border: "none",
+            borderRadius: "6px",
+            color: "#fff",
+            fontWeight: "bold",
+            cursor: "pointer",
+            transition: "0.3s",
+          }}
+        >
           {carregando ? "Entrando..." : "Entrar"}
         </button>
       </div>
