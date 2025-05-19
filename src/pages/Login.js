@@ -21,7 +21,7 @@ function Login() {
     setCarregando(true);
 
     try {
-      const resposta = await axios.post("https://grupo-reune-backend.onrender.com/api/login", {
+      const resposta = await axios.post("https://grupo-reune-backend-production-14b5.up.railway.app/api/login", {
         email,
         senha,
       });
