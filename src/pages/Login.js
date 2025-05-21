@@ -28,7 +28,9 @@ function Login() {
       console.log("✅ Resposta do backend:", resposta.data);
 
       setCarregando(false);
-      localStorage.setItem("usuarioLogado", JSON.stringify(resposta.data.usuario));
+
+      // ✅ Corrigido: salvar no localStorage com a key "usuario"
+      localStorage.setItem("usuario", JSON.stringify(resposta.data.usuario));
 
       // Redireciona para o painel do backoffice
       window.location.href = "https://painel.gruporeune.com";
