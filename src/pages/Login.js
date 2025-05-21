@@ -20,21 +20,20 @@ function Login() {
     setCarregando(true);
 
     try {
-      const resposta = await axios.post("https://grupo-reune-backend-production-14b5.up.railway.app/api/login", {
-        email,
-        senha,
-      });
+      const resposta = await axios.post(
+        "https://grupo-reune-backend-production-14b5.up.railway.app/api/login",
+        { email, senha }
+      );
 
       console.log("✅ Resposta do backend:", resposta.data);
 
       setCarregando(false);
 
-      // Padronizado como "usuario"
+      // ✅ Chave corrigida para 'usuario' (antes estava 'usuarioLogado')
       localStorage.setItem("usuario", JSON.stringify(resposta.data.usuario));
 
       // Redireciona para o painel do backoffice
       window.location.href = "https://painel.gruporeune.com";
-
     } catch (erro) {
       console.error("❌ Erro no login:", erro);
       setCarregando(false);
