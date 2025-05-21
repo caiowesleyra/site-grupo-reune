@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -14,99 +14,106 @@ function Login() {
     setTimeout(() => setShowCard(true), 100);
   }, []);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async () => {
+    console.log("🔍 handleLogin foi chamado");
     setErro("");
     setCarregando(true);
 
     try {
-      const resposta = await axios.post("https://grupo-reune-backend.onrender.com/api/login", {
-        email,
-        senha,
-      });
+      const resposta = await axios.post(
+        "https://grupo-reune-backend-production-14b5.up.railway.app/api/login",
+        { email, senha }
+      );
 
-      localStorage.setItem("usuario", JSON.stringify(resposta.data.usuario));
-      navigate("/dashboard");
-    } catch (err) {
-      setErro("Email ou senha incorretos.");
-    } finally {
+      console.log("✅ Resposta do backend:", resposta.data);
+
       setCarregando(false);
+
+      // ✅ Chave corrigida para 'usuario' (antes estava 'usuarioLogado')
+      localStorage.setItem("usuario", JSON.stringify(resposta.data.usuario));
+
+      // Redireciona para o painel do backoffice
+      window.location.href = `https://painel.gruporeune.com?usuario=${encodeURIComponent(JSON.stringify(resposta.data.usuario))}`;
+    } catch (erro) {
+      console.error("❌ Erro no login:", erro);
+      setCarregando(false);
+      setErro("Email ou senha inválidos.");
     }
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #3A0CA3, #7209B7, #F72585)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      {showCard && (
-        <div
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "#000",
+      color: "#fff",
+      fontFamily: "Poppins, sans-serif",
+    }}>
+      <div style={{
+        background: "#111",
+        borderRadius: "12px",
+        padding: "40px",
+        width: "100%",
+        maxWidth: "400px",
+        boxShadow: "0 0 20px rgba(0,0,0,0.5)",
+        transform: showCard ? "translateY(0)" : "translateY(50px)",
+        opacity: showCard ? 1 : 0,
+        transition: "all 0.5s ease",
+      }}>
+        <div style={{ textAlign: "center", marginBottom: "20px" }}>
+          <img src="/logo.png" alt="REUNE" style={{ width: "80px", marginBottom: "10px" }} />
+          <h2>Bem-vindo de volta</h2>
+        </div>
+
+        <input
+          type="email"
+          placeholder="Digite seu e-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           style={{
-            background: "#fff",
-            padding: "30px",
-            borderRadius: "12px",
-            boxShadow: "0px 8px 30px rgba(0, 0, 0, 0.25)",
             width: "100%",
-            maxWidth: "400px",
-            textAlign: "center",
+            padding: "12px",
+            marginBottom: "12px",
+            borderRadius: "6px",
+            border: "none",
+            outline: "none",
+          }}
+        />
+        <input
+          type="password"
+          placeholder="Digite sua senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "12px",
+            marginBottom: "12px",
+            borderRadius: "6px",
+            border: "none",
+            outline: "none",
+          }}
+        />
+        {erro && <p style={{ color: "#ff4d4f", marginBottom: "10px" }}>{erro}</p>}
+        <button
+          onClick={handleLogin}
+          disabled={carregando}
+          style={{
+            width: "100%",
+            padding: "12px",
+            backgroundColor: "#00C9A7",
+            border: "none",
+            borderRadius: "6px",
+            color: "#fff",
+            fontWeight: "bold",
+            cursor: "pointer",
+            transition: "0.3s",
           }}
         >
-          <h2 style={{ marginBottom: "20px", color: "#333" }}>Entrar no Sistema</h2>
-          {erro && <p style={{ color: "red", marginBottom: "10px" }}>{erro}</p>}
-          <form onSubmit={handleLogin}>
-            <input
-              type="email"
-              placeholder="E-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              style={{
-                width: "100%",
-                padding: "10px",
-                margin: "8px 0",
-                border: "1px solid #ccc",
-                borderRadius: "6px",
-              }}
-            />
-            <input
-              type="password"
-              placeholder="Senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-              style={{
-                width: "100%",
-                padding: "10px",
-                margin: "8px 0",
-                border: "1px solid #ccc",
-                borderRadius: "6px",
-              }}
-            />
-            <button
-              type="submit"
-              disabled={carregando}
-              style={{
-                width: "100%",
-                padding: "10px",
-                backgroundColor: "#6a1b9a",
-                color: "white",
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer",
-                fontWeight: "bold",
-                marginTop: "10px",
-              }}
-            >
-              {carregando ? "Entrando..." : "Entrar"}
-            </button>
-          </form>
-        </div>
-      )}
+          {carregando ? "Entrando..." : "Entrar"}
+        </button>
+      </div>
     </div>
   );
 }
