@@ -29,7 +29,7 @@ function Login() {
 
       setCarregando(false);
 
-      // ✅ Corrigido: salvar no localStorage com a key "usuario"
+      // Padronizado como "usuario"
       localStorage.setItem("usuario", JSON.stringify(resposta.data.usuario));
 
       // Redireciona para o painel do backoffice
