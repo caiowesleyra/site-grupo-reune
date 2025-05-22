@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
-import Sucesso from "./pages/Sucesso";
 
 function App() {
   const navigate = useNavigate();
@@ -29,7 +28,6 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/cadastro" element={<Cadastro />} />
-      <Route path="/sucesso" element={<Sucesso />} />
     </Routes>
   );
 }
