@@ -1,34 +1,30 @@
 // src/App.js
-import React, { useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import Login from "./pages/Login";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Contato from "./pages/Contato";
+import Sobre from "./pages/Sobre";
+import ProjetosSociais from "./pages/ProjetosSociais";
+import Fundador from "./pages/Fundador";
 import Cadastro from "./pages/Cadastro";
+import Login from "./pages/Login";
+import SiteLayout from "./components/SiteLayout";
 
 function App() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const usuarioParam = params.get("usuario");
-
-    if (usuarioParam) {
-      try {
-        const usuario = JSON.parse(decodeURIComponent(usuarioParam));
-        localStorage.setItem("usuario", JSON.stringify(usuario)); // <-- ESSENCIAL
-        console.log("✅ usuario salvo:", usuario);
-        window.history.replaceState({}, document.title, window.location.pathname);
-        navigate("/sucesso"); // redireciona após login
-      } catch (err) {
-        console.error("❌ Erro ao salvar usuario:", err);
-      }
-    }
-  }, [navigate]);
-
   return (
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/cadastro" element={<Cadastro />} />
-    </Routes>
+    <Router>
+      <SiteLayout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/contato" element={<Contato />} />
+          <Route path="/sobre" element={<Sobre />} />
+          <Route path="/projetos-sociais" element={<ProjetosSociais />} />
+          <Route path="/fundador" element={<Fundador />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </SiteLayout>
+    </Router>
   );
 }
 
