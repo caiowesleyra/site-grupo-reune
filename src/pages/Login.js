@@ -22,11 +22,11 @@ function Login() {
 
     const usuario = resposta.data.usuario;
 
-    // 📝 Salva o usuário no localStorage!
+    // 🔥 Salvar o usuário no localStorage
     localStorage.setItem("usuario", JSON.stringify(usuario));
 
-    // Redireciona para o painel sem a URL bagunçada
-    window.location.href = "https://painel.gruporeune.com/";
+    // Redirecionar para o painel normalmente
+    navigate("/dashboard");
   } catch (err) {
     setErro("Email ou senha incorretos.");
   } finally {
