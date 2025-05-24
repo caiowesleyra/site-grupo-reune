@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
-  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,13 +20,18 @@ function Login() {
 
       const usuario = resposta.data.usuario;
 
-      // Salva os dados do usuário no localStorage
-      localStorage.setItem("usuario", JSON.stringify(usuario));
+      if (usuario) {
+        // Salva no localStorage de forma segura
+        localStorage.setItem("usuario", JSON.stringify(usuario));
 
-      // Redireciona para o painel real com os dados na URL
-      window.location.href = `https://painel.gruporeune.com/?usuario=${encodeURIComponent(
-        JSON.stringify(usuario)
-      )}`;
+        // Redireciona para o painel com os dados na URL
+        const urlPainel = `https://painel.gruporeune.com/?usuario=${encodeURIComponent(
+          JSON.stringify(usuario)
+        )}`;
+        window.location.assign(urlPainel); // Usa assign para forçar a navegação
+      } else {
+        setErro("Usuário inválido ou não encontrado.");
+      }
     } catch (err) {
       setErro("Email ou senha incorretos.");
     } finally {
