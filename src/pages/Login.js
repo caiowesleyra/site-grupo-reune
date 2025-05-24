@@ -10,28 +10,29 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setErro("");
-    setCarregando(true);
+  e.preventDefault();
+  setErro("");
+  setCarregando(true);
 
-    try {
-      const resposta = await axios.post("https://grupo-reune-backend.onrender.com/api/login", {
-        email,
-        senha,
-      });
+  try {
+    const resposta = await axios.post("https://grupo-reune-backend.onrender.com/api/login", {
+      email,
+      senha,
+    });
 
-      const usuario = resposta.data.usuario;
+    const usuario = resposta.data.usuario;
 
-      // Redireciona com o usuário na URL para o painel
-      window.location.href = `https://painel.gruporeune.com/?usuario=${encodeURIComponent(
-        JSON.stringify(usuario)
-      )}`;
-    } catch (err) {
-      setErro("Email ou senha incorretos.");
-    } finally {
-      setCarregando(false);
-    }
-  };
+    // 📝 Salva o usuário no localStorage!
+    localStorage.setItem("usuario", JSON.stringify(usuario));
+
+    // Redireciona para o painel sem a URL bagunçada
+    window.location.href = "https://painel.gruporeune.com/";
+  } catch (err) {
+    setErro("Email ou senha incorretos.");
+  } finally {
+    setCarregando(false);
+  }
+};
 
   return (
     <div style={{ minHeight: "100vh", background: "#f2f2f2", display: "flex", justifyContent: "center", alignItems: "center" }}>
